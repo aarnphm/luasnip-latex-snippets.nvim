@@ -1,68 +1,76 @@
 local M = {}
 
 local MATH_NODES = {
-  displayed_equation = true,
-  inline_formula = true,
-  math_environment = true,
+    displayed_equation = true,
+    inline_formula = true,
+    math_environment = true,
 }
 
 local TEXT_NODES = {
-  text_mode = true,
-  label_definition = true,
-  label_reference = true,
+    text_mode = true,
+    label_definition = true,
+    label_reference = true,
 }
 
-local function get_node_at_cursor()
-  local pos = vim.api.nvim_win_get_cursor(0)
-  -- Subtract one to account for 1-based row indexing in nvim_win_get_cursor
-  local row, col = pos[1] - 1, pos[2]
-
-  local parser = vim.treesitter.get_parser(0, "latex")
-  if not parser then
-    return
-  end
-
-  local root_tree = parser:parse({ row, col, row, col })[1]
-  local root = root_tree and root_tree:root()
-  if not root then
-    return
-  end
-
-  return root:named_descendant_for_range(row, col, row, col)
-end
+local CODE_BLOCK_NODES = { -- Add this to define code block node types
+    fenced_code_block = true,
+    indented_code_block = true, -- Optional: include indented code blocks as well if needed
+}
 
 function M.in_text(check_parent)
-  local node = get_node_at_cursor()
-  while node do
-    if node:type() == "text_mode" then
-      if check_parent then
-        -- For \text{}
-        local parent = node:parent()
-        if parent and MATH_NODES[parent:type()] then
-          return false
+    local node = vim.treesitter.get_node({ ignore_injections = false })
+    
+    -- Check for code blocks in any filetype
+    local block_node = node
+    while block_node do
+        if CODE_BLOCK_NODES[block_node:type()] then
+            return true -- If in a code block, always consider it text
         end
-      end
-
-      return true
-    elseif MATH_NODES[node:type()] then
-      return false
+        block_node = block_node:parent()
     end
-    node = node:parent()
-  end
-  return true
+
+    while node do
+        if node:type() == "text_mode" then
+            if check_parent then
+                -- For \text{}
+                local parent = node:parent()
+                if parent and MATH_NODES[parent:type()] then
+                    return false
+                end
+            end
+            return true
+        elseif MATH_NODES[node:type()] then
+            return false
+        end
+        node = node:parent()
+    end
+    return true
 end
 
 function M.in_mathzone()
-  local node = get_node_at_cursor()
-  while node do
-    if TEXT_NODES[node:type()] then
-      return false
-    elseif MATH_NODES[node:type()] then
-      return true
+    local node = vim.treesitter.get_node({ ignore_injections = false })
+    local current_filetype = vim.bo.filetype
+
+    -- Check if we are in a markdown file and inside a code block
+    if current_filetype == "markdown" or current_filetype == "quarto" then
+        local block_node = node
+        while block_node do
+            if CODE_BLOCK_NODES[block_node:type()] then
+                return false -- If in a code block in markdown, never consider it math zone
+            end
+            block_node = block_node:parent()
+        end
     end
-    node = node:parent()
-  end
-  return false
+
+    while node do
+        if TEXT_NODES[node:type()] then
+            return false
+        elseif MATH_NODES[node:type()] then
+            return true
+        end
+        node = node:parent()
+    end
+    return false
 end
 
 return M
