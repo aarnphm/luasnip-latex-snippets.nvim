@@ -25,6 +25,8 @@ function M.retrieve(not_math)
       { t({ "\\begin{align*}", "\t" }), i(1), t({ "", ".\\end{align*}" }) }
     ),
 
+    s({ trig = "  ", name = "space" }, { t({ ";" }) }),
+
     parse_snippet({ trig = "beg", name = "begin{} / end{}" }, "\\begin{$1}\n\t$0\n\\end{$1}"),
 
     s({ trig = "bigfun", name = "Big function" }, {
