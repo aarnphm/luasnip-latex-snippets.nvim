@@ -11,21 +11,20 @@ function M.retrieve(not_math)
   local conds = require("luasnip.extras.expand_conditions")
   local condition = pipe({ conds.line_begin, not_math })
 
-  local parse_snippet = ls.extend_decorator.apply(ls.parser.parse_snippet, {
-    condition = condition,
-  }) --[[@as function]]
+  local parse_snippet =
+    ls.extend_decorator.apply(ls.parser.parse_snippet, { condition = condition }) --[[@as function]]
 
-  local s = ls.extend_decorator.apply(ls.snippet, {
-    condition = condition,
-  }) --[[@as function]]
+  local s = ls.extend_decorator.apply(ls.snippet, { condition = condition }) --[[@as function]]
 
   return {
     s(
       { trig = "ali", name = "Align" },
-      { t({ "\\begin{align*}", "\t" }), i(1), t({ "", ".\\end{align*}" }) }
+      { t({ "\\begin{align*}", "\t" }), i(1), t({ "", "\\end{align*}" }) }
     ),
-
-    s({ trig = "  ", name = "space" }, { t({ ";" }) }),
+    s(
+      { trig = "bali", name = "Aligned" },
+      { t({ "\\begin{aligned}", "\t" }), i(1), t({ "", "\\end{aligned}" }) }
+    ),
 
     parse_snippet({ trig = "beg", name = "begin{} / end{}" }, "\\begin{$1}\n\t$0\n\\end{$1}"),
 
@@ -46,7 +45,7 @@ function M.retrieve(not_math)
       t(")"),
       t(" = "),
       i(0),
-      t({ "", ".\\end{align*}" }),
+      t({ "", "\\end{align*}" }),
     }),
   }
 end

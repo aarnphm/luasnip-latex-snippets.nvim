@@ -43,6 +43,8 @@ local _autosnippets = function(is_math, not_math)
     "math_iA_no_backslash",
     "math_iA",
     "math_wrA",
+    "math_i",
+    "bwA",
   }) do
     vim.list_extend(
       autosnippets,
@@ -78,7 +80,7 @@ M.setup_tex = function(is_math, not_math)
     -- }),
   })
 
-  local math_i = require("luasnip-latex-snippets/math_i").retrieve(is_math)
+  local math_i = require("luasnip-latex-snippets.math_i").retrieve(is_math)
 
   ls.add_snippets("tex", math_i, { default_priority = 0 })
 
@@ -96,7 +98,7 @@ M.setup_markdown = function()
   local is_math = utils.with_opts(utils.is_math, true)
   local not_math = utils.with_opts(utils.not_math, true)
 
-  local math_i = require("luasnip-latex-snippets/math_i").retrieve(is_math)
+  local math_i = require("luasnip-latex-snippets.math_i").retrieve(is_math)
   ls.add_snippets("markdown", math_i, { default_priority = 0 })
 
   local autosnippets = _autosnippets(is_math, not_math)
@@ -107,7 +109,6 @@ M.setup_markdown = function()
   local to_filter = {}
   for _, str in ipairs({
     "wA",
-    "bwA",
   }) do
     local t = require(("luasnip-latex-snippets.%s"):format(str)).retrieve(not_math)
     vim.list_extend(to_filter, vim.tbl_map(trigger_of_snip, t))

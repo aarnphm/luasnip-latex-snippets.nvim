@@ -136,12 +136,13 @@ function M.retrieve(is_math)
 
     parse_snippet({ trig = "letw", name = "let omega" }, "Let $\\Omega \\subset \\C$ be open."),
     parse_snippet({ trig = "nnn", name = "bigcap" }, "\\bigcap_{${1:i \\in ${2: I}}} $0"),
-    parse_snippet({ trig = "norm", name = "norm" }, "\\|$1\\|$0"),
-    parse_snippet({ trig = "<>", name = "hokje" }, "\\diamond "),
+    parse_snippet({ trig = "nom", name = "norm" }, "\\|$1\\|$0"),
+    parse_snippet({ trig = "<>", name = "hokje" }, "\\diamond"),
     parse_snippet({ trig = ">>", name = ">>" }, "\\gg"),
     parse_snippet({ trig = "<<", name = "<<" }, "\\ll"),
+    parse_snippet({ trig = "  ", name = "space" }, "\\;"),
 
-    parse_snippet({ trig = "stt", name = "text subscript" }, "_\\text{$1} $0"),
+    parse_snippet({ trig = "stt", name = "text subscript" }, "_\\text{$1}"),
     parse_snippet({ trig = "tt", name = "text" }, "\\text{$1}$0"),
 
     parse_snippet({ trig = "xx", name = "cross" }, "\\times "),
@@ -149,6 +150,7 @@ function M.retrieve(is_math)
     parse_snippet({ trig = "**", name = "cdot", priority = 100 }, "\\cdot "),
 
     parse_snippet({ trig = ":=", name = "colon equals (lhs defined as rhs)" }, "\\coloneqq "),
+    parse_snippet({ trig = "qed", name = "qed" }, "\\boxed{}"),
 
     parse_snippet(
       { trig = "cvec", name = "column vector" },
