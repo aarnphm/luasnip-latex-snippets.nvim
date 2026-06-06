@@ -130,7 +130,7 @@ function M.retrieve(is_math)
     parse_snippet({ trig = "lg", name = "log" }, "\\log "),
     parse_snippet({ trig = "qd", name = "quad" }, "\\quad "),
     parse_snippet({ trig = "//", name = "Fraction" }, "\\frac{$1}{$2}$0"),
-    -- parse_snippet({ trig = "\\\\\\", name = "setminus" }, "\\setminus"),
+    parse_snippet({ trig = "---", name = "setminus", priority = 200 }, "\\setminus"),
     parse_snippet({ trig = "->", name = "to", priority = 100 }, "\\to "),
     parse_snippet({ trig = "-->", name = "long to", priority = 200 }, "\\longrightarrow "),
 
@@ -157,7 +157,7 @@ function M.retrieve(is_math)
       "\\begin{pmatrix} ${1:x}_${2:1}\\\\ \\vdots\\\\ $1_${2:n} \\end{pmatrix}"
     ),
     parse_snippet({ trig = "ceil", name = "ceil" }, "\\left\\lceil $1 \\right\\rceil $0"),
-    parse_snippet({ trig = "OO", name = "emptyset" }, "\\emptyset"),
+    parse_snippet({ trig = "OO", name = "emptyset", priority = 300 }, "\\emptyset "),
     parse_snippet({ trig = "RR", name = "R" }, "\\mathbb{R}"),
     parse_snippet({ trig = "QQ", name = "Q" }, "\\mathbb{Q}"),
     parse_snippet({ trig = "ZZ", name = "Z" }, "\\mathbb{Z}"),
