@@ -132,6 +132,7 @@ function M.retrieve(is_math)
     parse_snippet({ trig = "//", name = "Fraction" }, "\\frac{$1}{$2}$0"),
     parse_snippet({ trig = "---", name = "setminus", priority = 200 }, "\\setminus"),
     parse_snippet({ trig = "->", name = "to", priority = 100 }, "\\to "),
+    parse_snippet({ trig = "ell", name = "ell", priority = 100 }, "\\ell "),
     parse_snippet({ trig = "-->", name = "long to", priority = 200 }, "\\longrightarrow "),
 
     parse_snippet({ trig = "letw", name = "let omega" }, "Let $\\Omega \\subset \\C$ be open."),
